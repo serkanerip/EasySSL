@@ -12,6 +12,7 @@ if [ "$1" == "" ] || [ "$1" == "help" ]; then
     echo "available options:"
     echo "ca            Creates a root certificate(CA)"
     echo "certificate   Creates a certificate"
+    echo "update        Update the easyssl"
     echo "help          Shows this message"
     echo "\nExamples:"
     echo "              easyssl ca init"
@@ -57,9 +58,9 @@ generate_server_certificate() {
     echo "CSR created: $(pwd)/csr.pem"
 
     ext=$(cat $SERVER_EXT | sed "s/@host@/$1/g")
-    echo "$ext" > tmp_ext
+    echo "$ext" > /tmp/tmp_ext
     openssl x509 -req -in csr.pem -CA $CA_PATH -CAkey $CA_KEY_PATH \
-        -CAcreateserial -out certificate.crt -days 365 -sha256 -extfile tmp_ext
+        -CAcreateserial -out certificate.crt -days 365 -sha256 -extfile /tmp/tmp_ext
     echo "Certificate created: $(pwd)/certificate.crt"
 }
 
@@ -72,13 +73,16 @@ generate_client_certificate() {
     echo "CSR created: $(pwd)/csr.pem"
 
     ext=$(echo "$(cat $CLIENT_EXT)")
-    echo "$ext" > tmp_ext
+    echo "$ext" > /tmp/tmp_ext
     openssl x509 -req -in csr.pem -CA $CA_PATH -CAkey $CA_KEY_PATH \
-        -CAcreateserial -out certificate.crt -days 365 -sha256 -extfile tmp_ext
+        -CAcreateserial -out certificate.crt -days 365 -sha256 -extfile /tmp/tmp_ext
     echo "Certificate created: $(pwd)/certificate.crt"
 }
 
-rm tmp_*
+if [ "$1" == "update" ]; then
+    git pull
+fi;
+
 if [ "$1 $2" == "ca init" ]; then
     generate_ca
 fi;
@@ -90,4 +94,3 @@ fi;
 if [ "$1 $2" == "certificate client" ]; then
     generate_client_certificate $3
 fi;
-rm tmp_*

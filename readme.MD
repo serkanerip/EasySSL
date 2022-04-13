@@ -2,7 +2,7 @@
 
 ```sh
 git clone git@github.com:serkanerip/EasySSL.git $HOME/.easyssl && \
-echo "export PATH=$HOME/.easyssl/bin" >> ~/.zshrc
+sudo ln -s  $HOME/.easyssl/bin/easyssl.sh /usr/local/bin/easyssl
 ````
 
 # Usage
