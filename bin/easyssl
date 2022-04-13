@@ -7,11 +7,12 @@ CA_KEY_PATH="$EASYSSL_PATH/ca.key"
 SERVER_EXT="$EASYSSL_PATH/certificate.ext"
 CLIENT_EXT="$EASYSSL_PATH/client_cer.ext"
 
-if [ "$1" == "" ]; then
+if [ "$1" == "" ] || [ "$1" == "help" ]; then
     echo "Syntax: easyssl [options] [args...]"
     echo "available options:"
     echo "ca            Creates a root certificate(CA)"
     echo "certificate   Creates a certificate"
+    echo "help          Shows this message"
     echo "\nExamples:"
     echo "              easyssl ca init"
     echo "              easyssl certificate server dev.test"
