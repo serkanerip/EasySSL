@@ -49,7 +49,19 @@ generate_ca() {
     echo "Local CA is generated: $CA_PATH" 
 }
 
+check_ca_file_exists() {
+    if [ ! -f "$CA_PATH" ]; then
+        read -p "Missing CA file, do you want to create one ? [y/n]: " yn
+        case $yn in
+            [Yy]* ) generate_ca; break;;
+            [Nn]* ) exit;;
+            * ) echo "Please answer y or no";;
+        esac
+    fi;
+}
+
 generate_server_certificate() {
+    check_ca_file_exists
     openssl genrsa -out private-key.pem 4096
     echo "Private key created: $(pwd)/private-key.pem"
 
@@ -65,6 +77,7 @@ generate_server_certificate() {
 }
 
 generate_client_certificate() {
+    check_ca_file_exists
     openssl genrsa -out private-key.pem 4096
     echo "Private key created: $(pwd)/private-key.pem"
 
