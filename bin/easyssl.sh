@@ -1,11 +1,11 @@
+#!/bin/sh
+
 EASYSSL_PATH="$HOME/.easyssl"
 CONF_PATH="$EASYSSL_PATH/ca.conf"
 CA_PATH="$EASYSSL_PATH/ca.crt"
 CA_KEY_PATH="$EASYSSL_PATH/ca.key"
 SERVER_EXT="$EASYSSL_PATH/certificate.ext"
 CLIENT_EXT="$EASYSSL_PATH/client_cer.ext"
-
-mkdir -p $EASYSSL_PATH
 
 if [ "$1" == "" ]; then
     echo "Need command as first argument examples:"
