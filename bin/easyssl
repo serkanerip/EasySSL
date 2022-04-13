@@ -8,10 +8,14 @@ SERVER_EXT="$EASYSSL_PATH/certificate.ext"
 CLIENT_EXT="$EASYSSL_PATH/client_cer.ext"
 
 if [ "$1" == "" ]; then
-    echo "Need command as first argument examples:"
-    echo "easyssl ca init"
-    echo "easyssl certificate server [host]"
-    echo "easyssl certificate client [common_name]"
+    echo "Syntax: easyssl [options] [args...]"
+    echo "available options:"
+    echo "ca            Creates a root certificate(CA)"
+    echo "certificate   Creates a certificate"
+    echo "\nExamples:"
+    echo "              easyssl ca init"
+    echo "              easyssl certificate server dev.test"
+    echo "              easyssl certificate client example_common_name"
     exit 0
 fi
 
