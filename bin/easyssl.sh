@@ -80,7 +80,7 @@ generate_client_certificate() {
 }
 
 if [ "$1" == "update" ]; then
-    git pull
+    git -C $EASYSSL_PATH pull
 fi;
 
 if [ "$1 $2" == "ca init" ]; then
