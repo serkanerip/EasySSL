@@ -34,7 +34,7 @@ generate_ca() {
     fi;
 
     openssl genpkey -algorithm RSA -des3 -out $CA_KEY_PATH  -pkeyopt rsa_keygen_bits:4096 -pass pass:$privpass
-    echo "Private key created!";
+    echo "Private key created: $CA_KEY_PATH";
 
     passwd=""
     read -p "Enter password for certificate: " passwd
@@ -45,7 +45,7 @@ generate_ca() {
 
     openssl req -x509 -new -config $CONF_PATH -key $CA_KEY_PATH -sha256 -days 3650 -out $CA_PATH -passin pass:$privpass
 
-    echo "Local CA is generated!" 
+    echo "Local CA is generated: $CA_PATH" 
 }
 
 generate_server_certificate() {
