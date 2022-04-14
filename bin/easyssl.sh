@@ -14,7 +14,7 @@ if [ "$1" == "" ] || [ "$1" == "help" ]; then
     echo "certificate        Creates a certificate"
     echo "pkcs12             Archive certificate and private key in pkcs12 format"
     echo "export-pubkey      Export public key from certificate"
-    echo "fingerprint        Get fingerprint(md5) from public key or certificate"
+    echo "fingerprint        Get fingerprint of certificate"
     echo "update             Update the easyssl"
     echo "help               Shows this message"
     echo "\nExamples:"
@@ -23,8 +23,7 @@ if [ "$1" == "" ] || [ "$1" == "help" ]; then
     echo "              easyssl certificate client example_common_name"
     echo "              easyssl pkcs12 certificate.crt private.key"
     echo "              easyssl export-pubkey certificate.crt"
-    echo "              easyssl fingerprint -pubkey public.pem"
-    echo "              easyssl fingerprint -cert certificate.pem"
+    echo "              easyssl fingerprint [-sha256,-md5] certificate.pem"
     exit 0
 fi
 
@@ -114,17 +113,11 @@ export_pubkey() {
 }
 
 fingerprint() {
-    if [ "$1" == "-pubkey" ]
-    then
-        pkey=$(echo "$(cat $2)")
-    elif [ "$1" == "-cert" ]
-    then
-        pkey=$(openssl x509 -pubkey -noout -in $2)
-    else
-        echo "Available types: -cert, -pubkey"
+    if ! [[ "$1" == "-md5" || "$1" == "-sha256" ]]; then
+        echo "Hash type should be md5 or sha256"
         exit 0
-    fi;
-    echo "$pkey" | openssl md5 -c
+    fi
+    openssl x509 -noout -fingerprint -sha256 -inform pem -in $2
 }
 
 if [ "$1" == "update" ]; then
