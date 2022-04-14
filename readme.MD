@@ -12,10 +12,13 @@ Syntax: easyssl [options] [args...]
 available options:
 ca            Creates a root certificate(CA)
 certificate   Creates a certificate
+pkcs12        Archive certificate and private key in pkcs12 format
+update        Update the easyssl
 help          Shows this message
 
 Examples:
               easyssl ca init
               easyssl certificate server dev.test
               easyssl certificate client example_common_name
+              easyssl pkcs12 certificate.crt private.key
 ```
