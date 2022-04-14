@@ -10,16 +10,21 @@ CLIENT_EXT="$EASYSSL_PATH/client_cer.ext"
 if [ "$1" == "" ] || [ "$1" == "help" ]; then
     echo "Syntax: easyssl [options] [args...]"
     echo "available options:"
-    echo "ca            Creates a root certificate(CA)"
-    echo "certificate   Creates a certificate"
-    echo "pkcs12        Archive certificate and private key in pkcs12 format"
-    echo "update        Update the easyssl"
-    echo "help          Shows this message"
+    echo "ca                 Creates a root certificate(CA)"
+    echo "certificate        Creates a certificate"
+    echo "pkcs12             Archive certificate and private key in pkcs12 format"
+    echo "export-pubkey      Export public key from certificate"
+    echo "fingerprint        Get fingerprint(md5) from public key or certificate"
+    echo "update             Update the easyssl"
+    echo "help               Shows this message"
     echo "\nExamples:"
     echo "              easyssl ca init"
     echo "              easyssl certificate server dev.test"
     echo "              easyssl certificate client example_common_name"
     echo "              easyssl pkcs12 certificate.crt private.key"
+    echo "              easyssl export-pubkey certificate.crt"
+    echo "              easyssl fingerprint -pubkey public.pem"
+    echo "              easyssl fingerprint -cert certificate.pem"
     exit 0
 fi
 
@@ -100,12 +105,42 @@ archive_to_pkcs12() {
     openssl pkcs12 -export -out archive.p12 -inkey $key -in $cer
 }
 
+export_pubkey() {
+    if [ "$1" == "" ]; then
+        echo "Provide a public key"
+        exit 0
+    fi
+    openssl x509 -pubkey -noout -in $1 > pubkey.pem
+}
+
+fingerprint() {
+    if [ "$1" == "-pubkey" ]
+    then
+        pkey=$(echo "$(cat $2)")
+    elif [ "$1" == "-cert" ]
+    then
+        pkey=$(openssl x509 -pubkey -noout -in $2)
+    else
+        echo "Available types: -cert, -pubkey"
+        exit 0
+    fi;
+    echo "$pkey" | openssl md5 -c
+}
+
 if [ "$1" == "update" ]; then
     git -C $EASYSSL_PATH pull
 fi;
 
 if [ "$1 $2" == "ca init" ]; then
     generate_ca
+fi;
+
+if [ "$1" == "fingerprint" ]; then
+    fingerprint $2 $3
+fi;
+
+if [ "$1" == "export-pubkey" ]; then
+    export_pubkey $2
 fi;
 
 if [ "$1" == "pkcs12" ]; then
