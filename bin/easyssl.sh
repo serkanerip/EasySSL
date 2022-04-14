@@ -128,7 +128,8 @@ fingerprint() {
 }
 
 if [ "$1" == "update" ]; then
-    git -C $EASYSSL_PATH pull
+    git -C $EASYSSL_PATH fetch origin main
+    git -C $EASYSSL_PATH reset --hard origin/main
 fi;
 
 if [ "$1 $2" == "ca init" ]; then
